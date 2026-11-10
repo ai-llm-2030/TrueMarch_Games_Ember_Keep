@@ -16,6 +16,13 @@
   <img src="assets/screenshot-play.png" alt="Ember Keep — gameplay" width="820">
 </p>
 
+## More screenshots
+
+<table>
+<tr><td width="50%"><img src="assets/screenshot-map.png" alt="The road through Ashen Hamlet"><br><sub>The road through Ashen Hamlet</sub></td><td width="50%"><img src="assets/screenshot-story.png" alt="Each world opens with its story"><br><sub>Each world opens with its story</sub></td></tr>
+<tr><td width="50%"><img src="assets/screenshot-play2.png" alt="Running the rooftops"><br><sub>Running the rooftops</sub></td><td width="50%"><img src="assets/screenshot-opts.png" alt="Options: three difficulties"><br><sub>Options: three difficulties</sub></td></tr>
+</table>
+
 ## Controls
 
 | Keys | Action |
