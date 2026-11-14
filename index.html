@@ -180,6 +180,10 @@
   .ekpad .ab button { width: 58px; height: 52px; }
   .ekpad .ab button[data-k=jump] { width: 70px; height: 64px; border-radius: 50%; font-size: 14px; }
   .ekpad .ab button[data-k=dash].locked { opacity: .3; }
+  .ekpad button.rew { width: 50px; height: 50px; border-radius: 50%; font-size: 22px; color: #bfe6ff; border-color: #4a7a9a;
+    background: linear-gradient(#1c2a3a, #10161f); }
+  .ekpad button.rew.on { background: linear-gradient(#bfe6ff, #5a9ac8); color: #0a1a2a; }
+  .ekpad button.rew.locked { visibility: hidden; }
   body.ember .hint { color: #b8957a; }
   body.ember .hint kbd { border-color: #6a3a3a; color: #ffe2c0; }
   body.touch .hint { display: none; }
@@ -196,6 +200,8 @@
     .ekpad .ab button[data-k=dash] { grid-column: 1; grid-row: 1; }
     .ekpad .ab button[data-k=atk] { grid-column: 1; grid-row: 2; }
     .ekpad .ab button[data-k=jump] { grid-column: 2; grid-row: 1 / span 2; width: 72px; height: 72px; }
+    .ekpad { gap: 4px; }
+    .ekpad button.rew { width: 36px; height: 46px; border-radius: 18px; font-size: 18px; }
   }
   .keys .touch-k { display: none; }
   body.touch .keys .key-k { display: none; }
@@ -313,11 +319,12 @@
             <li><i>Move</i><kbd>←</kbd><kbd>→</kbd> run · <kbd>Space</kbd> jump, hold for higher</li>
             <li><i>Fight</i><kbd>X</kbd> slash · <kbd>↓</kbd>+<kbd>X</kbd> in the air bounce · <kbd>C</kbd> dash</li>
             <li><i>Keep</i><kbd class="res">Esc</kbd> back · <kbd class="res">P</kbd> pause · <kbd>R</kbd> retry · <kbd class="res">M</kbd> sound</li>
+            <li><i>New</i>hold <kbd>E</kbd> Ember Rewind — undo the last 5 seconds</li>
           </ul>
           <ul class="t">
             <li><i>Move</i><kbd class="pad">◀</kbd><kbd class="pad">▶</kbd> run · <kbd class="pad">JUMP</kbd> hold for higher</li>
             <li><i>Fight</i><kbd class="pad">SLASH</kbd> · <kbd class="pad">▼</kbd>+<kbd class="pad">SLASH</kbd> in the air bounce · <kbd class="pad">DASH</kbd></li>
-            <li><i>Keep</i><kbd class="pad">❚❚</kbd> pause</li>
+            <li><i>Keep</i><kbd class="pad">❚❚</kbd> pause · hold <kbd class="pad">↺</kbd> rewind</li>
           </ul>
         </div>
       </div>
@@ -331,15 +338,18 @@
             <button class="ek-btn ghost" id="sndBtn">Sound: on</button>
             <button class="ek-btn ghost" id="musBtn">Music: on</button>
             <button class="ek-btn ghost" id="motBtn">Motion: full</button>
+            <button class="ek-btn ghost" id="rwBtn">Rewind: on</button>
             <button class="ek-btn ghost" id="wipeBtn">Erase save</button>
           </div>
           <p class="keys"><span class="key-k">
             <b>← →</b> run · <b>Space</b>/<b>Z</b> jump (hold = higher) · <b>X</b>/<b>J</b> slash (<b>↑</b> up, <b>↓</b> in air = pogo)<br>
-            <b>C</b>/<b>Shift</b>/<b>K</b> dash · <b>P</b>/<b>Esc</b> pause · <b>R</b> retry · <b>M</b> sound
+            <b>C</b>/<b>Shift</b>/<b>K</b> dash · <b>P</b>/<b>Esc</b> pause · <b>R</b> retry · <b>M</b> sound<br>
+            <b>E</b>/<b>Q</b>/<b>Backspace</b> (hold) Ember Rewind
           </span><span class="touch-k">
             <b>◀ ▶</b> run · <b>JUMP</b> (hold = higher) · <b>SLASH</b> (hold <b>▲</b> = up, <b>▼</b> in air = pogo)<br>
-            <b>DASH</b> + a direction · <b>❚❚</b> pause
+            <b>DASH</b> + a direction · <b>❚❚</b> pause · hold <b>↺</b> Ember Rewind
           </span></p>
+          <p class="keys rwnote"><span style="color:#bfe6ff;font-weight:700">Ember Rewind</span> — hold <span class="key-k"><b>E</b></span><span class="touch-k"><b>↺</b></span> and Wick's flame runs time backwards: up to 5 seconds — foes, lifts, crumbling floors, even a fall you just took. The blue meter refills as you play. The clock never runs back, so medals stay honest; Boss Rush is played straight.</p>
           <div class="row"><button class="ek-btn" id="optBack">Done <small>Enter</small></button></div>
         </div>
       </div>
@@ -391,13 +401,14 @@
     <div class="dp">
       <button data-k="l">◀</button><button data-k="u">▲</button><button data-k="d">▼</button><button data-k="r">▶</button>
     </div>
+    <button data-k="rew" id="padRew" class="rew" aria-label="Rewind (hold)">↺</button>
     <div class="ab">
       <button data-k="dash" id="padDash">DASH</button>
       <button data-k="atk">SLASH</button>
       <button data-k="jump">JUMP</button>
     </div>
   </div>
-  <p class="hint keys-only" data-gs-opt="short"><kbd>←</kbd><kbd>→</kbd> run · <kbd>Space</kbd> jump · <kbd>X</kbd> slash · <kbd>C</kbd> dash · <kbd>P</kbd> pause · <kbd>M</kbd> sound</p>
+  <p class="hint keys-only" data-gs-opt="short"><kbd>←</kbd><kbd>→</kbd> run · <kbd>Space</kbd> jump · <kbd>X</kbd> slash · <kbd>C</kbd> dash · <kbd>E</kbd> rewind · <kbd>P</kbd> pause · <kbd>M</kbd> sound</p>
 </div>
 
 <script src="lib/arcade.js"></script>
@@ -1247,6 +1258,8 @@ function sfx(n, arg) {
     case 'warn': tone(880, 0.08, 'square', 0.04); tone(880, 0.08, 'square', 0.04, null, 0.14); break;
     case 'wind': noise(1.6, 700, 0.06, 'bandpass', 0, 0.4); break;
     case 'tick': tone(1400, 0.035, 'square', 0.03); break;
+    case 'rewind': tone(880, 0.32, 'sawtooth', 0.04, 220); noise(0.3, 1600, 0.06, 'bandpass', 0, 0.8); break;
+    case 'rewound': tone(330, 0.12, 'triangle', 0.06, 660); break;
     case 'select': tone(880, 0.06, 'triangle', 0.06); tone(1320, 0.08, 'triangle', 0.05, null, 0.05); break;
     case 'back': tone(660, 0.06, 'triangle', 0.05, 440); break;
     case 'clear': N = [523, 659, 784, 1047, 784, 1047, 1319]; for (i = 0; i < N.length; i++) tone(N[i], 0.2, 'triangle', 0.08, null, i * 0.09); break;
@@ -1578,7 +1591,7 @@ function groundUnder(e) {
 /* ══ The player ═══════════════════════════════════════════════════════════ */
 
 var RUN = 145, GRAV = 1500, MAXFALL = 420, JUMPV = 455, DJUMPV = 405, WJV = 430, WJX = 195, DASHV = 380, DASHT = 0.16, POGO = 400;
-var p = null, input = { l: 0, r: 0, u: 0, d: 0, jump: 0, dash: 0, atk: 0 }, pressed = {};
+var p = null, input = { l: 0, r: 0, u: 0, d: 0, jump: 0, dash: 0, atk: 0, rew: 0 }, pressed = {};
 var hitstop = 0, shakeA = 0, flashA = 0, slowmo = 0;
 
 function spawnPlayer(x, y, fresh) {
@@ -1842,7 +1855,7 @@ function hurt(from, dmg) {
 function die(why) {
   var P = p;
   if (P.dead) return;
-  P.dead = true; P.deadT = 0.95; deaths++;
+  P.dead = true; P.deadT = rwCan() ? 1.6 : 0.95; deaths++;   // a beat longer when Ember Rewind could still undo it
   if (rush) rush.hearts = 0;
   shake(9); hitstop = 0.12; sfx('die'); flashA = 0.5;
   var cx = P.x + P.w / 2, cy = P.y + P.h / 2;
@@ -1896,6 +1909,7 @@ function drawFallNote() {
 }
 function respawn() {
   if (rush) { rushFail(); return; }
+  RW.hist.length = 0; RW.acc = 0;   // a fall you let stand is final: the rewind starts over at the lantern
   sw = cp.sw;
   for (var k in crum) { crum[k].t = -1; crum[k].gone = 0; }
   shots = [];
@@ -1906,6 +1920,133 @@ function respawn() {
   for (var i = 0; i < 16; i++) spark(p.x + p.w / 2, p.y + p.h / 2, rnd(-60, 60), rnd(-90, 10), 0.6, '#ffd27a', 2, 'sq');
   ring(p.x + p.w / 2, p.y + p.h / 2, 30, 'rgba(255,210,120,.9)');
   sfx('check');
+}
+
+/* ══ Ember Rewind ═════════════════════════════════════════════════════════
+ *
+ *  Hold E / Q / Backspace (or the ↺ pad button) and the level runs backwards:
+ *  Wick, every foe, shot, lift, crumbling block, switch, ember and relic, the
+ *  rising lava and the guardian. 30 snapshots a second, the last 5 seconds
+ *  kept, played back at double speed. It works from the moment of a fall too
+ *  (the fall still counts in the stats), but once you let the flame relight at
+ *  a lantern the history is gone. A blue meter (5 s) drains as you rewind and
+ *  refills at 0.5 s per second of play. The level clock never runs back — the
+ *  rewind costs real time — so time medals stay fair; Boss Rush is always
+ *  played straight. Off/on in Options (SAVE.rw; old saves default to on).
+ * ════════════════════════════════════════════════════════════════════════ */
+var RW_HZ = 30, RW_KEEP = 150, RW_SPEED = 2, RW_MAX = 5, RW_FILL = 0.5;
+var RW = { hist: [], acc: 0, back: 0, meter: RW_MAX, active: false, uses: 0, fx: 0 };
+function rwOn() { return SAVE.rw !== 0 && !rush; }
+function rwCan() { return rwOn() && RW.hist.length > 1 && RW.meter > 0.05; }
+function rwReset() { RW.hist.length = 0; RW.acc = 0; RW.back = 0; RW.meter = RW_MAX; RW.active = false; RW.uses = 0; RW.fx = 0; }
+/* deep copy that keeps shared references shared (Wick's lift, the foes his slash already hit) */
+function rwClone(v, m) {
+  if (v === null || typeof v !== 'object') return v;
+  var c = m.get(v); if (c) return c;
+  var i;
+  if (Array.isArray(v)) { c = new Array(v.length); m.set(v, c); for (i = 0; i < v.length; i++) c[i] = rwClone(v[i], m); return c; }
+  if (ArrayBuffer.isView(v)) { c = v.slice(); m.set(v, c); return c; }
+  c = {}; m.set(v, c);
+  for (var k in v) if (Object.prototype.hasOwnProperty.call(v, k)) c[k] = rwClone(v[k], m);
+  return c;
+}
+function rwSnap() {
+  return rwClone({ p: p, items: items, foes: foes, plats: plats, shots: shots, boss: boss, crum: crum, cp: cp,
+    sw: sw, lavaY: lavaY, wind: wind, windT: windT, windDir: windDir, windPhase: windPhase,
+    embersGot: embersGot, relicsGot: relicsGot }, new Map());
+}
+function rwApply(S) {
+  p = S.p; items = S.items; foes = S.foes; plats = S.plats; shots = S.shots; boss = S.boss; crum = S.crum; cp = S.cp;
+  sw = S.sw; lavaY = S.lavaY; wind = S.wind; windT = S.windT; windDir = S.windDir; windPhase = S.windPhase;
+  embersGot = S.embersGot; relicsGot = S.relicsGot;
+}
+function rwRecord(dt) {
+  if (!rwOn() || mode !== 'play' || introT > 1.9 || !p || p.dead) { RW.acc = 0; return; }
+  RW.meter = Math.min(RW_MAX, RW.meter + RW_FILL * dt);
+  RW.acc += dt;
+  if (RW.acc < 1 / RW_HZ) return;
+  RW.acc = RW.acc % (1 / RW_HZ);
+  RW.hist.push(rwSnap());
+  if (RW.hist.length > RW_KEEP) RW.hist.shift();
+}
+/* one frame of rewinding; false when there is nothing (left) to rewind */
+function rwStep(dt) {
+  if (!input.rew || mode !== 'play' || !rwCan() || introT > 1.9) {
+    if (RW.active) { RW.active = false; RW.back = 0; RW.acc = 0; hitstop = 0; slowmo = 0; sfx('rewound'); }
+    return false;
+  }
+  if (!RW.active) { RW.active = true; RW.uses++; RW.back = 1 / RW_HZ; sfx('rewind'); }
+  RW.fx += dt;
+  lvTime += dt;                       // the clock never runs back
+  RW.back += dt * RW_SPEED;
+  var wasDead = p.dead;
+  while (RW.back >= 1 / RW_HZ && RW.hist.length > 1 && RW.meter > 0) {
+    RW.back -= 1 / RW_HZ;
+    RW.meter = Math.max(0, RW.meter - 1 / RW_HZ);
+    rwApply(RW.hist.pop());
+  }
+  // the newest snapshot left is where play resumes; keep it, but play from a copy of it
+  if (RW.hist.length) rwApply(rwClone(RW.hist[RW.hist.length - 1], new Map()));
+  if (wasDead && !p.dead) { fallNote = null; ring(p.x + p.w / 2, p.y + p.h / 2, 34, 'rgba(160,220,255,.9)'); }
+  p.inv = Math.max(p.inv, 0.5);       // a short grace on resume so a rewind never lands you mid-hit
+  hitstop = 0; slowmo = 0; flashA = 0; pressed = {};
+  if (!NOFX && Math.random() < 0.6) spark(p.x + p.w / 2 + rnd(-8, 8), p.y + p.h / 2 + rnd(-8, 8), rnd(-40, 40), rnd(-40, 40), 0.35, '#bfe6ff', 2, 'dot');
+  return true;
+}
+/* world space: the path Wick is being pulled back along */
+function rwDrawTrail(t) {
+  if (!RW.active || RW.hist.length < 2) return;
+  ctx.save();
+  var n = RW.hist.length;
+  for (var i = n - 1, j = 0; i >= 0; i -= 3, j++) {
+    var q = RW.hist[i].p, a = Math.max(0, 0.75 - j * 0.035);
+    if (a <= 0) break;
+    ctx.globalAlpha = a;
+    ctx.fillStyle = j % 2 ? '#bfe6ff' : '#7ac0ff';
+    flamePath(ctx, q.x + q.w / 2, q.y + q.h / 2 + 5, 7 - Math.min(4, j * 0.15)); ctx.fill();
+  }
+  var o = RW.hist[0].p;           // the furthest point back you can still reach
+  ctx.globalAlpha = 0.45 + 0.25 * Math.sin(t * 8);
+  ctx.strokeStyle = '#bfe6ff'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+  rrect(ctx, o.x - 3, o.y - 3, o.w + 6, o.h + 6, 4); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+}
+/* screen space: a cold blue wash, scan lines and the ◀◀ mark */
+function rwDrawOverlay(t) {
+  if (!RW.active) return;
+  ctx.save();
+  ctx.globalCompositeOperation = 'color';
+  ctx.fillStyle = 'rgba(70,120,170,.55)'; ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = 'rgba(180,225,255,.07)';
+  var off = (t * 90) % 6;
+  for (var y = -6 + off; y < H; y += 6) ctx.fillRect(0, y, W, 2);
+  if (!calm()) { ctx.fillStyle = 'rgba(200,235,255,.18)'; ctx.fillRect(0, (t * 260) % (H + 40) - 20, W, 3); }
+  ctx.font = 'bold 15px Georgia, serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  var bl = Math.sin(t * 10) > -0.3;
+  if (bl) {
+    ctx.fillStyle = '#e6f6ff';
+    for (var k = 0; k < 2; k++) { var x0 = 18 + k * 11; ctx.beginPath(); ctx.moveTo(x0 + 10, H - 30); ctx.lineTo(x0, H - 23); ctx.lineTo(x0 + 10, H - 16); ctx.fill(); }
+  }
+  hudText('REWIND', 46, H - 23, '#e6f6ff');
+  ctx.restore();
+}
+/* HUD: the meter under the hearts, and the prompt while a fall can still be undone */
+function rwDrawHud(t) {
+  if (!rwOn()) return;
+  var x = 14, y = 50, w = 52, k = RW.meter / RW_MAX;
+  ctx.fillStyle = 'rgba(0,0,0,.5)'; rrect(ctx, x - 1, y - 1, w + 14, 8, 3); ctx.fill();
+  ctx.fillStyle = '#bfe6ff'; ctx.font = 'bold 9px Georgia, serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText('↺', x + 1, y + 3);
+  ctx.fillStyle = 'rgba(120,170,210,.25)'; ctx.fillRect(x + 11, y + 1, w, 4);
+  ctx.fillStyle = RW.active ? '#ffffff' : k > 0.99 ? '#bfe6ff' : '#6ab0e8'; ctx.fillRect(x + 11, y + 1, w * k, 4);
+  if (p && p.dead && rwCan() && mode === 'play') {
+    ctx.save(); ctx.globalAlpha = 0.75 + 0.25 * Math.sin(t * 9);
+    ctx.font = 'bold 13px Georgia, serif'; ctx.textAlign = 'center';
+    hudText('Hold ' + keyName('rew') + ' — Ember Rewind', W / 2, H * 0.62, '#bfe6ff');
+    ctx.restore();
+  }
 }
 
 /* ── the slash ── */
@@ -3538,7 +3679,7 @@ var titleT = 0, lastEsc = 0, pendingAfterStory = null, resultCtx = null;
 
 function banner(txt, col, sub) { bannerQ = { txt: txt, col: col || '#ffd27a', sub: sub || '', t: 0 }; }
 function keyName(k) {
-  var K = touchMode ? { lr: '◀ ▶', jump: 'JUMP', atk: 'SLASH', dash: 'DASH', down: '▼' } : { lr: '← →', jump: 'Space', atk: 'X', dash: 'C', down: '↓' };
+  var K = touchMode ? { lr: '◀ ▶', jump: 'JUMP', atk: 'SLASH', dash: 'DASH', down: '▼', rew: '↺' } : { lr: '← →', jump: 'Space', atk: 'X', dash: 'C', down: '↓', rew: 'E' };
   return K[k] || k;
 }
 function keyText(s) { return s.replace(/\{(\w+)\}/g, function (m, k) { return keyName(k); }); }
@@ -3583,6 +3724,7 @@ function startLevel(w, l, fromRush) {
   banner(LV.boss ? bossName() : LV.name, Wd.accent, (LV.boss ? (rush ? 'Boss Rush · ' + (rush.i + 1) + ' / 5' : 'Guardian of ' + Wd.name) : 'World ' + (w + 1) + '-' + (l + 1)));
   if (LV.boss) sfx('roar');
   $('padDash').classList.toggle('locked', !has(1));
+  rwReset(); $('padRew').classList.toggle('locked', !rwOn());
 }
 function enterLevel(w, l) {
   audio();
@@ -3658,7 +3800,8 @@ function showResults() {
   $('reMedal').innerHTML = '<img src="' + ICON[m] + '" class="on" alt="' + m + '"><span>Time <b>' + fmt(R.time) + '</b>' + (R.prevT != null ? ' · best ' + fmt(Math.min(R.prevT, R.time)) : '') +
     '<br>' + (m === 'gold' ? 'Gold — hearth-swift!' : 'Gold ≤ ' + fmt(g) + ' · Silver ≤ ' + fmt(g * 1.4)) + '</span>';
   $('reBest').hidden = !R.nb;
-  $('reStats').innerHTML = (LV.boss ? '' : '<span>Relics</span><b>' + relicsGot.filter(Boolean).length + ' / 3</b><span>Embers</span><b>' + embersGot + ' / ' + embersTotal + '</b>') + '<span>Falls</span><b>' + deaths + '</b>';
+  $('reStats').innerHTML = (LV.boss ? '' : '<span>Relics</span><b>' + relicsGot.filter(Boolean).length + ' / 3</b><span>Embers</span><b>' + embersGot + ' / ' + embersTotal + '</b>') + '<span>Falls</span><b>' + deaths + '</b>' +
+    (rwOn() ? '<span>Rewinds</span><b>' + (RW.uses || 'none') + '</b>' : '');
   $('nextBtn').innerHTML = (R.w === 4 && R.l === 3 ? 'Map' : 'Continue') + ' <small>Enter</small>';
   sfx('select');
 }
@@ -3715,7 +3858,7 @@ function pause() {
   var html = '';
   for (var i = 0; i < 3; i++) html += '<img src="' + ICON.relic + '" class="' + (relicsGot[i] ? 'on' : '') + '" alt="">';
   $('paRelics').innerHTML = html; $('paRelics').hidden = !!LV.boss;
-  $('paStats').innerHTML = '<span>Time</span><b>' + fmt(rush ? rush.t : lvTime) + '</b><span>Falls</span><b>' + deaths + '</b>' + (LV.boss ? '' : '<span>Embers</span><b>' + embersGot + ' / ' + embersTotal + '</b>') + '<span style="grid-column:span 2;text-align:center;font-size:.8em;opacity:.8">' + (touchMode ? 'Tap Resume to go back to the game' : 'Esc — back to the game') + '</span>';
+  $('paStats').innerHTML = '<span>Time</span><b>' + fmt(rush ? rush.t : lvTime) + '</b><span>Falls</span><b>' + deaths + '</b>' + (LV.boss ? '' : '<span>Embers</span><b>' + embersGot + ' / ' + embersTotal + '</b>') + (RW.uses ? '<span>Rewinds</span><b>' + RW.uses + '</b>' : '') + '<span style="grid-column:span 2;text-align:center;font-size:.8em;opacity:.8">' + (touchMode ? 'Tap Resume to go back to the game' : 'Esc — back to the game') + '</span>';
   $('paSnd').textContent = SAVE.snd ? 'Sound: on' : 'Sound: off';
 }
 function resume() { if (mode !== 'pause') return; mode = 'play'; uiShow('play'); acc = 0; audio(); }
@@ -3817,6 +3960,7 @@ function updatePlay(dt) {
   introT = Math.max(0, introT - dt);
   if (bannerQ) { bannerQ.t += dt; if (bannerQ.t > 2.6) bannerQ = null; }
   if (fallNote && p && !p.dead) { fallNote.t += dt; if (fallNote.t > 4.6) fallNote = null; }
+  if (rwStep(dt)) { updateParts(dt); updateCam(dt, false); return; }
   if (hitstop > 0) { hitstop -= dt; pressedKeep(); updateParts(dt * 0.2); return; }
   var sdt = dt;
   if (slowmo > 0) { slowmo -= dt; sdt = dt * 0.35; }
@@ -3827,6 +3971,7 @@ function updatePlay(dt) {
     if (first) { pressed = {}; first = false; }
     acc -= STEP;
   }
+  rwRecord(sdt);
   updateParts(sdt);
   updateCam(dt, false);
   if (shakeA > 0) shakeA = Math.max(0, shakeA - dt * 30);
@@ -3858,6 +4003,7 @@ function renderPlay(t) {
   drawLiveTiles(t);
   drawShots(t);
   drawParts();
+  rwDrawTrail(t);
   if (lavaOn) drawRisingLava(t);
   var dark = LV.dark || 0;
   if (boss && boss.kind === 'regent' && boss.phase === 2 && !boss.dead) dark = 0.9;
@@ -3875,6 +4021,7 @@ function renderPlay(t) {
   }
   ctx.globalCompositeOperation = 'source-over';
   ctx.restore();
+  rwDrawOverlay(t);
   drawHud(t);
   if (flashA > 0) { ctx.fillStyle = 'rgba(255,240,220,' + flashA * 0.6 + ')'; ctx.fillRect(0, 0, W, H); }
 }
@@ -3981,6 +4128,7 @@ function drawHud(t) {
     ctx.restore();
   }
   drawFallNote();
+  rwDrawHud(t);
   if (mode === 'play' && !touchMode && introT > 0 && introT < 2.3 && !LV.boss) {
     ctx.font = '9px Georgia, serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     hudText('Esc — menu', W / 2, H - 12, 'rgba(255,230,200,' + Math.min(1, introT) * 0.8 + ')');
@@ -4126,7 +4274,8 @@ function drawNode(w, l, t) {
  * Escape within 150 ms is ignored.
  */
 var KEYMAP = { ArrowLeft: 'l', KeyA: 'l', ArrowRight: 'r', KeyD: 'r', ArrowUp: 'u', KeyW: 'u', ArrowDown: 'd', KeyS: 'd',
-  Space: 'jump', KeyZ: 'jump', KeyX: 'atk', KeyJ: 'atk', KeyC: 'dash', ShiftLeft: 'dash', ShiftRight: 'dash', KeyK: 'dash', KeyL: 'dash' };
+  Space: 'jump', KeyZ: 'jump', KeyX: 'atk', KeyJ: 'atk', KeyC: 'dash', ShiftLeft: 'dash', ShiftRight: 'dash', KeyK: 'dash', KeyL: 'dash',
+  KeyE: 'rew', KeyQ: 'rew', Backspace: 'rew' };   // Ember Rewind (hold)
 var menuSel = -1;
 function activeUi() {
   var ids = ['uiTitle', 'uiOpts', 'uiStory', 'uiPause', 'uiResult'];
@@ -4266,6 +4415,8 @@ $('optBack').addEventListener('click', goBack);
 $('backBtn').addEventListener('click', function () { audio(); goBack(); });
 function motionPaint() { document.body.classList.toggle('ek-rm', !!SAVE.rm); $('motBtn').textContent = 'Motion: ' + (calm() ? 'calm' : 'full'); }
 $('motBtn').addEventListener('click', function () { SAVE.rm = SAVE.rm ? 0 : 1; persist(); motionPaint(); if (SAVE.rm) shakeA = 0; sfx('select'); });
+function rwPaint() { $('rwBtn').textContent = 'Rewind: ' + (SAVE.rw === 0 ? 'off' : 'on'); }
+$('rwBtn').addEventListener('click', function () { SAVE.rw = SAVE.rw === 0 ? 1 : 0; persist(); rwPaint(); sfx(SAVE.rw ? 'rewind' : 'select'); });
 $('sndBtn').addEventListener('click', toggleSound);
 $('paSnd').addEventListener('click', toggleSound);
 $('musBtn').addEventListener('click', function () { SAVE.mus = SAVE.mus ? 0 : 1; persist(); $('musBtn').textContent = 'Music: ' + (SAVE.mus ? 'on' : 'off'); });
@@ -4298,6 +4449,7 @@ window.addEventListener('resize', layout);
 $('sndBtn').textContent = 'Sound: ' + (SAVE.snd ? 'on' : 'off');
 $('musBtn').textContent = 'Music: ' + (SAVE.mus ? 'on' : 'off');
 motionPaint();
+rwPaint();
 refreshTitle();
 uiShow('uiTitle');
 setSong(0);
@@ -4353,6 +4505,7 @@ window.__emberkeep = {
       boss: inStage && boss ? { hp: boss.hp, max: boss.max, dead: boss.dead, st: boss.st, x: boss.x, y: boss.y, w: boss.w } : null,
       x: inStage && p ? p.x : null, y: inStage && p ? p.y : null, vy: inStage && p ? p.vy : null, ground: !!(inStage && p && p.onGround), lantern: inStage && cp ? { x: cp.x, y: cp.y } : null,
       fall: fallNote ? { cause: fallNote.k, head: fallNote.head, tip: fallNote.tip } : null, calm: calm(),
+      rewind: { on: rwOn(), active: RW.active, meter: RW.meter, history: RW.hist.length, uses: RW.uses },
     };
   },
   /** The last 1,024 frames — interval and the keep's own work — as percentiles. Read-only. */

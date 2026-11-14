@@ -10,6 +10,14 @@
   <a href="https://ai-llm-2030.github.io/TrueMarch_Games_Ember_Keep/"><b>▶ Play Ember Keep in your browser</b></a>
 </p>
 
+## What's new: Ember Rewind
+
+Hold **E** (or **Q** / **Backspace**; the **↺** button on a touch screen) and the level runs backwards: Wick, every foe, shot, lift, crumbling floor, switch, ember and relic, the rising lava and the guardian, up to the last 5 seconds, played back at double speed. It works even in the moment after a fall. A blue meter under your hearts drains as you rewind and refills while you play. The clock never runs back (rewinding costs real time), so time medals stay fair, and the results card counts your rewinds. Boss Rush is always played straight; switch it off in **Options → Rewind**.
+
+<p align="center">
+  <img src="assets/screenshot-rewind.png" alt="Ember Rewind: pulling Wick back out of a fall" width="820">
+</p>
+
 ## Gameplay
 
 <p align="center">
@@ -31,6 +39,7 @@
 | Space | Jump (hold for higher) |
 | X | Slash · ↓ + X in the air to bounce |
 | C | Dash |
+| E (hold) | Ember Rewind |
 | R | Retry |
 | Esc | Back |
 | P | Pause |
